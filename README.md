@@ -1,7 +1,7 @@
 # Dtgsoft TypeScript Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2FDTG-Corp%2Fdtg-sdk-ts)
-[![npm shield](https://img.shields.io/npm/v/@dtgcorp/dtg-agent-sdk)](https://www.npmjs.com/package/@dtgcorp/dtg-agent-sdk)
+[![npm shield](https://img.shields.io/npm/v/@dongocquy/dtg-agent-sdk)](https://www.npmjs.com/package/@dongocquy/dtg-agent-sdk)
 
 The Dtgsoft TypeScript library provides convenient access to the Dtgsoft APIs from TypeScript.
 
@@ -29,7 +29,7 @@ The Dtgsoft TypeScript library provides convenient access to the Dtgsoft APIs fr
 ## Installation
 
 ```sh
-npm i -s @dtgcorp/dtg-agent-sdk
+npm i -s @dongocquy/dtg-agent-sdk
 ```
 
 ## Reference
@@ -41,7 +41,7 @@ A full reference for this library is available [here](https://github.com/DTG-Cor
 Instantiate and use the client with the following:
 
 ```typescript
-import { DtgAgentSdkClient } from "@dtgcorp/dtg-agent-sdk";
+import { DtgAgentSdkClient } from "@dongocquy/dtg-agent-sdk";
 
 const client = new DtgAgentSdkClient({ token: "YOUR_TOKEN" });
 await client.gateway.createChatCompletion({
@@ -58,7 +58,7 @@ await client.gateway.createChatCompletion({
 This SDK allows you to configure different environments for API requests.
 
 ```typescript
-import { DtgAgentSdkClient, DtgAgentSdkEnvironment } from "@dtgcorp/dtg-agent-sdk";
+import { DtgAgentSdkClient, DtgAgentSdkEnvironment } from "@dongocquy/dtg-agent-sdk";
 
 const client = new DtgAgentSdkClient({
     environment: DtgAgentSdkEnvironment.Production,
@@ -71,7 +71,7 @@ The SDK exports all request and response types as TypeScript interfaces. Simply 
 following namespace:
 
 ```typescript
-import { DtgAgentSdk } from "@dtgcorp/dtg-agent-sdk";
+import { DtgAgentSdk } from "@dongocquy/dtg-agent-sdk";
 
 const request: DtgAgentSdk.ChatCompletionRequest = {
     ...
@@ -84,7 +84,7 @@ When the API returns a non-success status code (4xx or 5xx response), a subclass
 will be thrown.
 
 ```typescript
-import { DtgAgentSdkError } from "@dtgcorp/dtg-agent-sdk";
+import { DtgAgentSdkError } from "@dongocquy/dtg-agent-sdk";
 
 try {
     await client.gateway.createChatCompletion(...);
@@ -105,7 +105,7 @@ try {
 This SDK supports direct imports of subpackage clients, which allows JavaScript bundlers to tree-shake and include only the imported subpackage code. This results in much smaller bundle sizes.
 
 ```typescript
-import { GatewayClient } from '@dtgcorp/dtg-agent-sdk/gateway';
+import { GatewayClient } from '@dongocquy/dtg-agent-sdk/gateway';
 
 const client = new GatewayClient({...});
 ```
@@ -115,7 +115,7 @@ const client = new GatewayClient({...});
 If you would like to send additional headers as part of the request, use the `headers` request option.
 
 ```typescript
-import { DtgAgentSdkClient } from "@dtgcorp/dtg-agent-sdk";
+import { DtgAgentSdkClient } from "@dongocquy/dtg-agent-sdk";
 
 const client = new DtgAgentSdkClient({
     ...
@@ -210,7 +210,7 @@ console.log(rawResponse.headers['X-My-Header']);
 The SDK supports logging. You can configure the logger by passing in a `logging` object to the client options.
 
 ```typescript
-import { DtgAgentSdkClient, logging } from "@dtgcorp/dtg-agent-sdk";
+import { DtgAgentSdkClient, logging } from "@dongocquy/dtg-agent-sdk";
 
 const client = new DtgAgentSdkClient({
     ...
