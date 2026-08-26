@@ -2,13 +2,13 @@
 
 import type { BaseClientOptions, BaseRequestOptions } from "../../../../BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "../../../../BaseClient.js";
-import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
+import { mergeHeaders } from "../../../../core/headers.js";
 import * as core from "../../../../core/index.js";
 import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import type * as DtgAgentSdk from "../../../index.js";
+import * as DtgAgentSdk from "../../../index.js";
 
 export declare namespace GatewayClient {
     export type Options = BaseClientOptions;
@@ -83,6 +83,11 @@ export class GatewayClient {
      * @param {DtgAgentSdk.ChatCompletionRequest} request
      * @param {GatewayClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link DtgAgentSdk.UnauthorizedError}
+     * @throws {@link DtgAgentSdk.ForbiddenError}
+     * @throws {@link DtgAgentSdk.NotFoundError}
+     * @throws {@link DtgAgentSdk.ContentTooLargeError}
+     * @throws {@link DtgAgentSdk.TooManyRequestsError}
      * @throws {@link errors.DtgAgentSdkError}
      * @throws {@link errors.DtgAgentSdkTimeoutError}
      *
@@ -106,12 +111,10 @@ export class GatewayClient {
         request: DtgAgentSdk.ChatCompletionRequest,
         requestOptions?: GatewayClient.RequestOptions,
     ): Promise<core.WithRawResponse<DtgAgentSdk.ChatCompletion>> {
-        const { "X-Hermes-Session-Id": hermesSessionId, "X-Hermes-Thread-Id": hermesThreadId, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "X-Hermes-Session-Id": hermesSessionId, "X-Hermes-Thread-Id": hermesThreadId }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -120,6 +123,92 @@ export class GatewayClient {
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.DtgAgentSdkEnvironment.Production,
                 "v1/chat/completions",
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as DtgAgentSdk.ChatCompletion, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new DtgAgentSdk.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new DtgAgentSdk.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new DtgAgentSdk.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new DtgAgentSdk.ContentTooLargeError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new DtgAgentSdk.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.DtgAgentSdkError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/chat/completions");
+    }
+
+    /**
+     * @param {DtgAgentSdk.WebhookChatCompletionRequest} request
+     * @param {GatewayClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link DtgAgentSdk.UnauthorizedError}
+     * @throws {@link DtgAgentSdk.ForbiddenError}
+     * @throws {@link DtgAgentSdk.NotFoundError}
+     * @throws {@link DtgAgentSdk.ContentTooLargeError}
+     * @throws {@link DtgAgentSdk.TooManyRequestsError}
+     * @throws {@link errors.DtgAgentSdkError}
+     * @throws {@link errors.DtgAgentSdkTimeoutError}
+     *
+     * @example
+     *     await client.gateway.createChatCompletionByAgentPath({
+     *         agent_id: "agent_id",
+     *         messages: [{
+     *                 role: "system",
+     *                 content: "content"
+     *             }]
+     *     })
+     */
+    public createChatCompletionByAgentPath(
+        request: DtgAgentSdk.WebhookChatCompletionRequest,
+        requestOptions?: GatewayClient.RequestOptions,
+    ): core.HttpResponsePromise<DtgAgentSdk.ChatCompletion> {
+        return core.HttpResponsePromise.fromPromise(this.__createChatCompletionByAgentPath(request, requestOptions));
+    }
+
+    private async __createChatCompletionByAgentPath(
+        request: DtgAgentSdk.WebhookChatCompletionRequest,
+        requestOptions?: GatewayClient.RequestOptions,
+    ): Promise<core.WithRawResponse<DtgAgentSdk.ChatCompletion>> {
+        const { agent_id: agentId, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.DtgAgentSdkEnvironment.Production,
+                `webhook/${core.url.encodePathParam(agentId)}/v1/chat/completions`,
             ),
             method: "POST",
             headers: _headers,
@@ -138,13 +227,31 @@ export class GatewayClient {
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.DtgAgentSdkError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new DtgAgentSdk.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new DtgAgentSdk.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new DtgAgentSdk.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new DtgAgentSdk.ContentTooLargeError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new DtgAgentSdk.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.DtgAgentSdkError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/chat/completions");
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/webhook/{agent_id}/v1/chat/completions",
+        );
     }
 }

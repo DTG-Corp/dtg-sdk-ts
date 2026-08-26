@@ -6,6 +6,11 @@ export interface Agent {
     status: Agent.Status;
     llm_provider?: string | undefined;
     llm_model?: string | undefined;
+    llm_base_url?: string | undefined;
+    knowledge_ids?: string[] | undefined;
+    enabled_tools?: string[] | undefined;
+    mcp_dynamic_server_ids?: string[] | undefined;
+    mcp_dynamic_tool_filter?: Record<string, unknown> | undefined;
 }
 
 export namespace Agent {
