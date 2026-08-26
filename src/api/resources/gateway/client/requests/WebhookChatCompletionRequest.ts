@@ -5,16 +5,17 @@ import type * as DtgAgentSdk from "../../../../index.js";
 /**
  * @example
  *     {
- *         model: "model",
+ *         agent_id: "agent_id",
  *         messages: [{
  *                 role: "system",
  *                 content: "content"
  *             }]
  *     }
  */
-export interface ChatCompletionRequest {
-    /** ID của agent (UUID) trên gateway `/v1/chat/completions`. */
-    model: string;
+export interface WebhookChatCompletionRequest {
+    agent_id: string;
+    /** Tuỳ chọn; agent đã xác định bởi path. */
+    model?: string;
     messages: DtgAgentSdk.ChatMessage[];
     temperature?: number;
     stream?: boolean;

@@ -8,7 +8,7 @@ import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import type * as DtgAgentSdk from "../../../index.js";
+import * as DtgAgentSdk from "../../../index.js";
 
 export declare namespace AgentsClient {
     export type Options = BaseClientOptions;
@@ -29,6 +29,8 @@ export class AgentsClient {
     /**
      * @param {AgentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link DtgAgentSdk.UnauthorizedError}
+     * @throws {@link DtgAgentSdk.TooManyRequestsError}
      * @throws {@link errors.DtgAgentSdkError}
      * @throws {@link errors.DtgAgentSdkTimeoutError}
      *
@@ -71,11 +73,18 @@ export class AgentsClient {
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.DtgAgentSdkError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new DtgAgentSdk.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new DtgAgentSdk.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.DtgAgentSdkError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/api/v1/agents");
@@ -85,6 +94,11 @@ export class AgentsClient {
      * @param {DtgAgentSdk.AgentCreateRequest} request
      * @param {AgentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link DtgAgentSdk.BadRequestError}
+     * @throws {@link DtgAgentSdk.UnauthorizedError}
+     * @throws {@link DtgAgentSdk.ForbiddenError}
+     * @throws {@link DtgAgentSdk.ContentTooLargeError}
+     * @throws {@link DtgAgentSdk.TooManyRequestsError}
      * @throws {@link errors.DtgAgentSdkError}
      * @throws {@link errors.DtgAgentSdkTimeoutError}
      *
@@ -136,11 +150,24 @@ export class AgentsClient {
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.DtgAgentSdkError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new DtgAgentSdk.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new DtgAgentSdk.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new DtgAgentSdk.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new DtgAgentSdk.ContentTooLargeError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new DtgAgentSdk.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.DtgAgentSdkError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/api/v1/agents");
@@ -150,6 +177,8 @@ export class AgentsClient {
      * @param {DtgAgentSdk.GetAgentRequest} request
      * @param {AgentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link DtgAgentSdk.UnauthorizedError}
+     * @throws {@link DtgAgentSdk.NotFoundError}
      * @throws {@link errors.DtgAgentSdkError}
      * @throws {@link errors.DtgAgentSdkTimeoutError}
      *
@@ -197,11 +226,18 @@ export class AgentsClient {
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.DtgAgentSdkError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new DtgAgentSdk.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new DtgAgentSdk.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.DtgAgentSdkError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/api/v1/agents/{id}");
@@ -211,6 +247,9 @@ export class AgentsClient {
      * @param {DtgAgentSdk.DeleteAgentRequest} request
      * @param {AgentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link DtgAgentSdk.UnauthorizedError}
+     * @throws {@link DtgAgentSdk.ForbiddenError}
+     * @throws {@link DtgAgentSdk.NotFoundError}
      * @throws {@link errors.DtgAgentSdkError}
      * @throws {@link errors.DtgAgentSdkTimeoutError}
      *
@@ -259,11 +298,20 @@ export class AgentsClient {
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.DtgAgentSdkError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new DtgAgentSdk.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new DtgAgentSdk.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new DtgAgentSdk.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.DtgAgentSdkError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/api/v1/agents/{id}");
@@ -273,6 +321,11 @@ export class AgentsClient {
      * @param {DtgAgentSdk.AgentUpdateRequest} request
      * @param {AgentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link DtgAgentSdk.BadRequestError}
+     * @throws {@link DtgAgentSdk.UnauthorizedError}
+     * @throws {@link DtgAgentSdk.ForbiddenError}
+     * @throws {@link DtgAgentSdk.NotFoundError}
+     * @throws {@link DtgAgentSdk.TooManyRequestsError}
      * @throws {@link errors.DtgAgentSdkError}
      * @throws {@link errors.DtgAgentSdkTimeoutError}
      *
@@ -324,11 +377,24 @@ export class AgentsClient {
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.DtgAgentSdkError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new DtgAgentSdk.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new DtgAgentSdk.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new DtgAgentSdk.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new DtgAgentSdk.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new DtgAgentSdk.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.DtgAgentSdkError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "PATCH", "/api/v1/agents/{id}");

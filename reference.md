@@ -96,6 +96,61 @@ await client.gateway.createChatCompletion({
 </dl>
 </details>
 
+<details><summary><code>client.gateway.<a href="/src/api/resources/gateway/client/Client.ts">createChatCompletionByAgentPath</a>({ ...params }) -> DtgAgentSdk.ChatCompletion</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.gateway.createChatCompletionByAgentPath({
+    agent_id: "agent_id",
+    messages: [{
+            role: "system",
+            content: "content"
+        }]
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `DtgAgentSdk.WebhookChatCompletionRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GatewayClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## agents
 <details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">listAgents</a>() -> DtgAgentSdk.ListAgentsResponse</code></summary>
 <dl>
@@ -1189,7 +1244,9 @@ await client.mcpServers.listMcpServerTools({
 ```typescript
 await client.mcpServers.createMcpServerTool({
     id: "id",
-    body: {}
+    kind: "rest",
+    slug: "slug",
+    display_name: "display_name"
 });
 
 ```
@@ -1206,7 +1263,7 @@ await client.mcpServers.createMcpServerTool({
 <dl>
 <dd>
 
-**request:** `DtgAgentSdk.CreateMcpServerToolRequest` 
+**request:** `DtgAgentSdk.McpServerToolCreateRequest` 
     
 </dd>
 </dl>

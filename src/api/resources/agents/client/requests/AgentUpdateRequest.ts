@@ -15,4 +15,12 @@ export interface AgentUpdateRequest {
     llm_model?: string;
     llm_base_url?: string;
     llm_api_key?: string;
+    /** Omit/null = giữ nguyên; [] = xoá. */
+    knowledge_ids?: string[];
+    /** Omit/null = giữ nguyên; [] = xoá. */
+    enabled_tools?: string[];
+    /** Omit/null = giữ nguyên; [] = xoá. */
+    mcp_dynamic_server_ids?: string[];
+    /** Omit/null = giữ nguyên; {} = xoá. */
+    mcp_dynamic_tool_filter?: Record<string, unknown>;
 }

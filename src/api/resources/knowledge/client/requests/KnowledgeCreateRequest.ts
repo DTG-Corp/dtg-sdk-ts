@@ -11,6 +11,7 @@ export interface KnowledgeCreateRequest {
     /** Idempotency key cho mutation (tránh double-submit). */
     "Idempotency-Key"?: string;
     title: string;
+    /** Tối đa 4 MiB */
     content: string;
     content_type?: KnowledgeCreateRequest.ContentType;
     tags?: string[];

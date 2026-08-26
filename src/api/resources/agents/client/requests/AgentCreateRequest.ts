@@ -14,4 +14,12 @@ export interface AgentCreateRequest {
     llm_model?: string;
     llm_base_url?: string;
     llm_api_key?: string;
+    /** UUID các knowledge item gắn agent (điền vào dtg_knowledge_ids). */
+    knowledge_ids?: string[];
+    /** ID tool từ catalog (dtg_enabled_tools), vd knowledge_rag. */
+    enabled_tools?: string[];
+    /** UUID MCP server động (apimcp) gắn agent. */
+    mcp_dynamic_server_ids?: string[];
+    /** Filter tool expose cho agent (Dai Agent) theo từng MCP server động (khóa = UUID server). */
+    mcp_dynamic_tool_filter?: Record<string, unknown>;
 }

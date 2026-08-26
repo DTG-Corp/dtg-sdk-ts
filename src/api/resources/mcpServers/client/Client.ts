@@ -8,7 +8,7 @@ import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import type * as DtgAgentSdk from "../../../index.js";
+import * as DtgAgentSdk from "../../../index.js";
 
 export declare namespace McpServersClient {
     export type Options = BaseClientOptions;
@@ -216,30 +216,36 @@ export class McpServersClient {
     }
 
     /**
-     * @param {DtgAgentSdk.CreateMcpServerToolRequest} request
+     * @param {DtgAgentSdk.McpServerToolCreateRequest} request
      * @param {McpServersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link DtgAgentSdk.BadRequestError}
+     * @throws {@link DtgAgentSdk.UnauthorizedError}
+     * @throws {@link DtgAgentSdk.ForbiddenError}
+     * @throws {@link DtgAgentSdk.NotFoundError}
      * @throws {@link errors.DtgAgentSdkError}
      * @throws {@link errors.DtgAgentSdkTimeoutError}
      *
      * @example
      *     await client.mcpServers.createMcpServerTool({
      *         id: "id",
-     *         body: {}
+     *         kind: "rest",
+     *         slug: "slug",
+     *         display_name: "display_name"
      *     })
      */
     public createMcpServerTool(
-        request: DtgAgentSdk.CreateMcpServerToolRequest,
+        request: DtgAgentSdk.McpServerToolCreateRequest,
         requestOptions?: McpServersClient.RequestOptions,
     ): core.HttpResponsePromise<DtgAgentSdk.CreateMcpServerToolResponse> {
         return core.HttpResponsePromise.fromPromise(this.__createMcpServerTool(request, requestOptions));
     }
 
     private async __createMcpServerTool(
-        request: DtgAgentSdk.CreateMcpServerToolRequest,
+        request: DtgAgentSdk.McpServerToolCreateRequest,
         requestOptions?: McpServersClient.RequestOptions,
     ): Promise<core.WithRawResponse<DtgAgentSdk.CreateMcpServerToolResponse>> {
-        const { id, "Idempotency-Key": idempotencyKey, body: _body } = request;
+        const { id, "Idempotency-Key": idempotencyKey, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -274,11 +280,22 @@ export class McpServersClient {
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.DtgAgentSdkError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new DtgAgentSdk.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new DtgAgentSdk.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new DtgAgentSdk.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new DtgAgentSdk.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.DtgAgentSdkError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(

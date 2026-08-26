@@ -8,7 +8,7 @@ import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import type * as DtgAgentSdk from "../../../index.js";
+import * as DtgAgentSdk from "../../../index.js";
 
 export declare namespace ApiKeysClient {
     export type Options = BaseClientOptions;
@@ -150,6 +150,8 @@ export class ApiKeysClient {
      * @param {DtgAgentSdk.RevokeApiKeyRequest} request
      * @param {ApiKeysClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link DtgAgentSdk.UnauthorizedError}
+     * @throws {@link DtgAgentSdk.NotFoundError}
      * @throws {@link errors.DtgAgentSdkError}
      * @throws {@link errors.DtgAgentSdkTimeoutError}
      *
@@ -198,11 +200,18 @@ export class ApiKeysClient {
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.DtgAgentSdkError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new DtgAgentSdk.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new DtgAgentSdk.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.DtgAgentSdkError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/api/v1/api-keys/{id}");
