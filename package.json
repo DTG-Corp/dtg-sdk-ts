@@ -1,6 +1,6 @@
 {
     "name": "@dongocquy/dtg-agent-sdk",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "private": false,
     "repository": {
         "type": "git",
@@ -76,6 +76,17 @@
                 "default": "./dist/cjs/api/resources/knowledge/exports.js"
             },
             "default": "./dist/cjs/api/resources/knowledge/exports.js"
+        },
+        "./cameras": {
+            "import": {
+                "types": "./dist/esm/api/resources/cameras/exports.d.mts",
+                "default": "./dist/esm/api/resources/cameras/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/cameras/exports.d.ts",
+                "default": "./dist/cjs/api/resources/cameras/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/cameras/exports.js"
         },
         "./mcpServers": {
             "import": {

@@ -2,6 +2,7 @@ export * from "./Agent.js";
 export * from "./ApiKey.js";
 export * from "./ApiKeyCreateResponse.js";
 export * from "./BadRequestErrorBody.js";
+export * from "./Camera.js";
 export * from "./ChannelConfig.js";
 export * from "./ChatCompletion.js";
 export * from "./ChatMessage.js";

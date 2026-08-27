@@ -2,6 +2,7 @@
 
 import { AgentsClient } from "./api/resources/agents/client/Client.js";
 import { ApiKeysClient } from "./api/resources/apiKeys/client/Client.js";
+import { CamerasClient } from "./api/resources/cameras/client/Client.js";
 import { GatewayClient } from "./api/resources/gateway/client/Client.js";
 import { KnowledgeClient } from "./api/resources/knowledge/client/Client.js";
 import { McpServersClient } from "./api/resources/mcpServers/client/Client.js";
@@ -23,6 +24,7 @@ export class DtgAgentSdkClient {
     protected _apiKeys: ApiKeysClient | undefined;
     protected _organizations: OrganizationsClient | undefined;
     protected _knowledge: KnowledgeClient | undefined;
+    protected _cameras: CamerasClient | undefined;
     protected _mcpServers: McpServersClient | undefined;
 
     constructor(options: DtgAgentSdkClient.Options) {
@@ -47,6 +49,10 @@ export class DtgAgentSdkClient {
 
     public get knowledge(): KnowledgeClient {
         return (this._knowledge ??= new KnowledgeClient(this._options));
+    }
+
+    public get cameras(): CamerasClient {
+        return (this._cameras ??= new CamerasClient(this._options));
     }
 
     public get mcpServers(): McpServersClient {

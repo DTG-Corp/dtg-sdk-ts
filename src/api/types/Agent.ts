@@ -9,6 +9,8 @@ export interface Agent {
     llm_base_url?: string | undefined;
     knowledge_ids?: string[] | undefined;
     enabled_tools?: string[] | undefined;
+    /** UUID camera ORG được phép khi bật tool org_cameras (điền vào dtg_camera_tool_ids). */
+    camera_tool_ids?: string[] | undefined;
     mcp_dynamic_server_ids?: string[] | undefined;
     mcp_dynamic_tool_filter?: Record<string, unknown> | undefined;
 }

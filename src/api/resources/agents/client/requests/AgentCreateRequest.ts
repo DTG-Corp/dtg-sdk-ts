@@ -18,6 +18,8 @@ export interface AgentCreateRequest {
     knowledge_ids?: string[];
     /** ID tool từ catalog (dtg_enabled_tools), vd knowledge_rag. */
     enabled_tools?: string[];
+    /** UUID camera ORG được phép khi bật tool org_cameras (điền vào dtg_camera_tool_ids). */
+    camera_tool_ids?: string[];
     /** UUID MCP server động (apimcp) gắn agent. */
     mcp_dynamic_server_ids?: string[];
     /** Filter tool expose cho agent (Dai Agent) theo từng MCP server động (khóa = UUID server). */

@@ -4,8 +4,8 @@ import * as DtgAgentSdk from "../../src/api/index";
 import { DtgAgentSdkClient } from "../../src/Client";
 import { mockServerPool } from "../mock-server/MockServerPool";
 
-describe("AgentsClient", () => {
-    test("listAgents (1)", async () => {
+describe("CamerasClient", () => {
+    test("listCameras (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
@@ -17,57 +17,58 @@ describe("AgentsClient", () => {
                 {
                     id: "id",
                     display_name: "display_name",
-                    status: "created",
-                    llm_provider: "llm_provider",
-                    llm_model: "llm_model",
-                    llm_base_url: "llm_base_url",
-                    knowledge_ids: ["knowledge_ids"],
-                    enabled_tools: ["enabled_tools"],
-                    camera_tool_ids: ["camera_tool_ids"],
-                    mcp_dynamic_server_ids: ["mcp_dynamic_server_ids"],
-                    mcp_dynamic_tool_filter: { key: "value" },
+                    vendor: "generic_rtsp",
+                    vendor_label: "vendor_label",
+                    rtsp_url: "rtsp_url",
+                    rtsp_username: "rtsp_username",
+                    has_rtsp_password: true,
+                    vendor_config: { key: "value" },
+                    enabled: true,
+                    notes: "notes",
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
                 },
             ],
             trace_id: "trace_id",
             timestamp: "2024-01-15T09:30:00Z",
         };
 
-        server.mockEndpoint().get("/api/v1/agents").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+        server.mockEndpoint().get("/api/v1/cameras").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.agents.listAgents();
+        const response = await client.cameras.listCameras();
         expect(response).toEqual(rawResponseBody);
     });
 
-    test("listAgents (2)", async () => {
+    test("listCameras (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
 
-        server.mockEndpoint().get("/api/v1/agents").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+        server.mockEndpoint().get("/api/v1/cameras").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
-            return await client.agents.listAgents();
+            return await client.cameras.listCameras();
         }).rejects.toThrow(DtgAgentSdk.UnauthorizedError);
     });
 
-    test("listAgents (3)", async () => {
+    test("listCameras (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
 
-        server.mockEndpoint().get("/api/v1/agents").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+        server.mockEndpoint().get("/api/v1/cameras").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
-            return await client.agents.listAgents();
+            return await client.cameras.listCameras();
         }).rejects.toThrow(DtgAgentSdk.TooManyRequestsError);
     });
 
-    test("createAgent (1)", async () => {
+    test("createCamera (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { display_name: "display_name" };
+        const rawRequestBody = { display_name: "display_name", vendor: "generic_rtsp", rtsp_url: "rtsp_url" };
         const rawResponseBody = {
             status: "ok",
             code: "code",
@@ -75,15 +76,16 @@ describe("AgentsClient", () => {
             data: {
                 id: "id",
                 display_name: "display_name",
-                status: "created",
-                llm_provider: "llm_provider",
-                llm_model: "llm_model",
-                llm_base_url: "llm_base_url",
-                knowledge_ids: ["knowledge_ids"],
-                enabled_tools: ["enabled_tools"],
-                camera_tool_ids: ["camera_tool_ids"],
-                mcp_dynamic_server_ids: ["mcp_dynamic_server_ids"],
-                mcp_dynamic_tool_filter: { key: "value" },
+                vendor: "generic_rtsp",
+                vendor_label: "vendor_label",
+                rtsp_url: "rtsp_url",
+                rtsp_username: "rtsp_username",
+                has_rtsp_password: true,
+                vendor_config: { key: "value" },
+                enabled: true,
+                notes: "notes",
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
             },
             trace_id: "trace_id",
             timestamp: "2024-01-15T09:30:00Z",
@@ -91,28 +93,30 @@ describe("AgentsClient", () => {
 
         server
             .mockEndpoint()
-            .post("/api/v1/agents")
+            .post("/api/v1/cameras")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.agents.createAgent({
+        const response = await client.cameras.createCamera({
             display_name: "display_name",
+            vendor: "generic_rtsp",
+            rtsp_url: "rtsp_url",
         });
         expect(response).toEqual(rawResponseBody);
     });
 
-    test("createAgent (2)", async () => {
+    test("createCamera (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { display_name: "display_name" };
+        const rawRequestBody = { display_name: "display_name", vendor: "generic_rtsp", rtsp_url: "rtsp_url" };
         const rawResponseBody = { key: "value" };
 
         server
             .mockEndpoint()
-            .post("/api/v1/agents")
+            .post("/api/v1/cameras")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(400)
@@ -120,21 +124,23 @@ describe("AgentsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.agents.createAgent({
+            return await client.cameras.createCamera({
                 display_name: "display_name",
+                vendor: "generic_rtsp",
+                rtsp_url: "rtsp_url",
             });
         }).rejects.toThrow(DtgAgentSdk.BadRequestError);
     });
 
-    test("createAgent (3)", async () => {
+    test("createCamera (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { display_name: "display_name" };
+        const rawRequestBody = { display_name: "display_name", vendor: "generic_rtsp", rtsp_url: "rtsp_url" };
         const rawResponseBody = { key: "value" };
 
         server
             .mockEndpoint()
-            .post("/api/v1/agents")
+            .post("/api/v1/cameras")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(401)
@@ -142,21 +148,23 @@ describe("AgentsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.agents.createAgent({
+            return await client.cameras.createCamera({
                 display_name: "display_name",
+                vendor: "generic_rtsp",
+                rtsp_url: "rtsp_url",
             });
         }).rejects.toThrow(DtgAgentSdk.UnauthorizedError);
     });
 
-    test("createAgent (4)", async () => {
+    test("createCamera (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { display_name: "display_name" };
+        const rawRequestBody = { display_name: "display_name", vendor: "generic_rtsp", rtsp_url: "rtsp_url" };
         const rawResponseBody = { key: "value" };
 
         server
             .mockEndpoint()
-            .post("/api/v1/agents")
+            .post("/api/v1/cameras")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(403)
@@ -164,21 +172,23 @@ describe("AgentsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.agents.createAgent({
+            return await client.cameras.createCamera({
                 display_name: "display_name",
+                vendor: "generic_rtsp",
+                rtsp_url: "rtsp_url",
             });
         }).rejects.toThrow(DtgAgentSdk.ForbiddenError);
     });
 
-    test("createAgent (5)", async () => {
+    test("createCamera (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { display_name: "display_name" };
+        const rawRequestBody = { display_name: "display_name", vendor: "generic_rtsp", rtsp_url: "rtsp_url" };
         const rawResponseBody = { key: "value" };
 
         server
             .mockEndpoint()
-            .post("/api/v1/agents")
+            .post("/api/v1/cameras")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(413)
@@ -186,21 +196,23 @@ describe("AgentsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.agents.createAgent({
+            return await client.cameras.createCamera({
                 display_name: "display_name",
+                vendor: "generic_rtsp",
+                rtsp_url: "rtsp_url",
             });
         }).rejects.toThrow(DtgAgentSdk.ContentTooLargeError);
     });
 
-    test("createAgent (6)", async () => {
+    test("createCamera (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { display_name: "display_name" };
+        const rawRequestBody = { display_name: "display_name", vendor: "generic_rtsp", rtsp_url: "rtsp_url" };
         const rawResponseBody = { key: "value" };
 
         server
             .mockEndpoint()
-            .post("/api/v1/agents")
+            .post("/api/v1/cameras")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(429)
@@ -208,13 +220,15 @@ describe("AgentsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.agents.createAgent({
+            return await client.cameras.createCamera({
                 display_name: "display_name",
+                vendor: "generic_rtsp",
+                rtsp_url: "rtsp_url",
             });
         }).rejects.toThrow(DtgAgentSdk.TooManyRequestsError);
     });
 
-    test("getAgent (1)", async () => {
+    test("getCamera (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
@@ -225,59 +239,60 @@ describe("AgentsClient", () => {
             data: {
                 id: "id",
                 display_name: "display_name",
-                status: "created",
-                llm_provider: "llm_provider",
-                llm_model: "llm_model",
-                llm_base_url: "llm_base_url",
-                knowledge_ids: ["knowledge_ids"],
-                enabled_tools: ["enabled_tools"],
-                camera_tool_ids: ["camera_tool_ids"],
-                mcp_dynamic_server_ids: ["mcp_dynamic_server_ids"],
-                mcp_dynamic_tool_filter: { key: "value" },
+                vendor: "generic_rtsp",
+                vendor_label: "vendor_label",
+                rtsp_url: "rtsp_url",
+                rtsp_username: "rtsp_username",
+                has_rtsp_password: true,
+                vendor_config: { key: "value" },
+                enabled: true,
+                notes: "notes",
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
             },
             trace_id: "trace_id",
             timestamp: "2024-01-15T09:30:00Z",
         };
 
-        server.mockEndpoint().get("/api/v1/agents/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+        server.mockEndpoint().get("/api/v1/cameras/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.agents.getAgent({
+        const response = await client.cameras.getCamera({
             id: "id",
         });
         expect(response).toEqual(rawResponseBody);
     });
 
-    test("getAgent (2)", async () => {
+    test("getCamera (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
 
-        server.mockEndpoint().get("/api/v1/agents/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+        server.mockEndpoint().get("/api/v1/cameras/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
-            return await client.agents.getAgent({
+            return await client.cameras.getCamera({
                 id: "id",
             });
         }).rejects.toThrow(DtgAgentSdk.UnauthorizedError);
     });
 
-    test("getAgent (3)", async () => {
+    test("getCamera (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
 
-        server.mockEndpoint().get("/api/v1/agents/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+        server.mockEndpoint().get("/api/v1/cameras/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
-            return await client.agents.getAgent({
+            return await client.cameras.getCamera({
                 id: "id",
             });
         }).rejects.toThrow(DtgAgentSdk.NotFoundError);
     });
 
-    test("deleteAgent (1)", async () => {
+    test("deleteCamera (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
@@ -292,19 +307,19 @@ describe("AgentsClient", () => {
 
         server
             .mockEndpoint()
-            .delete("/api/v1/agents/id")
+            .delete("/api/v1/cameras/id")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.agents.deleteAgent({
+        const response = await client.cameras.deleteCamera({
             id: "id",
         });
         expect(response).toEqual(rawResponseBody);
     });
 
-    test("deleteAgent (2)", async () => {
+    test("deleteCamera (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
@@ -312,20 +327,20 @@ describe("AgentsClient", () => {
 
         server
             .mockEndpoint()
-            .delete("/api/v1/agents/id")
+            .delete("/api/v1/cameras/id")
             .respondWith()
             .statusCode(401)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.agents.deleteAgent({
+            return await client.cameras.deleteCamera({
                 id: "id",
             });
         }).rejects.toThrow(DtgAgentSdk.UnauthorizedError);
     });
 
-    test("deleteAgent (3)", async () => {
+    test("deleteCamera (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
@@ -333,20 +348,20 @@ describe("AgentsClient", () => {
 
         server
             .mockEndpoint()
-            .delete("/api/v1/agents/id")
+            .delete("/api/v1/cameras/id")
             .respondWith()
             .statusCode(403)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.agents.deleteAgent({
+            return await client.cameras.deleteCamera({
                 id: "id",
             });
         }).rejects.toThrow(DtgAgentSdk.ForbiddenError);
     });
 
-    test("deleteAgent (4)", async () => {
+    test("deleteCamera (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
@@ -354,20 +369,20 @@ describe("AgentsClient", () => {
 
         server
             .mockEndpoint()
-            .delete("/api/v1/agents/id")
+            .delete("/api/v1/cameras/id")
             .respondWith()
             .statusCode(404)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.agents.deleteAgent({
+            return await client.cameras.deleteCamera({
                 id: "id",
             });
         }).rejects.toThrow(DtgAgentSdk.NotFoundError);
     });
 
-    test("updateAgent (1)", async () => {
+    test("updateCamera (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -378,15 +393,16 @@ describe("AgentsClient", () => {
             data: {
                 id: "id",
                 display_name: "display_name",
-                status: "created",
-                llm_provider: "llm_provider",
-                llm_model: "llm_model",
-                llm_base_url: "llm_base_url",
-                knowledge_ids: ["knowledge_ids"],
-                enabled_tools: ["enabled_tools"],
-                camera_tool_ids: ["camera_tool_ids"],
-                mcp_dynamic_server_ids: ["mcp_dynamic_server_ids"],
-                mcp_dynamic_tool_filter: { key: "value" },
+                vendor: "generic_rtsp",
+                vendor_label: "vendor_label",
+                rtsp_url: "rtsp_url",
+                rtsp_username: "rtsp_username",
+                has_rtsp_password: true,
+                vendor_config: { key: "value" },
+                enabled: true,
+                notes: "notes",
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
             },
             trace_id: "trace_id",
             timestamp: "2024-01-15T09:30:00Z",
@@ -394,20 +410,20 @@ describe("AgentsClient", () => {
 
         server
             .mockEndpoint()
-            .patch("/api/v1/agents/id")
+            .patch("/api/v1/cameras/id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.agents.updateAgent({
+        const response = await client.cameras.updateCamera({
             id: "id",
         });
         expect(response).toEqual(rawResponseBody);
     });
 
-    test("updateAgent (2)", async () => {
+    test("updateCamera (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -415,7 +431,7 @@ describe("AgentsClient", () => {
 
         server
             .mockEndpoint()
-            .patch("/api/v1/agents/id")
+            .patch("/api/v1/cameras/id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(400)
@@ -423,13 +439,13 @@ describe("AgentsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.agents.updateAgent({
+            return await client.cameras.updateCamera({
                 id: "id",
             });
         }).rejects.toThrow(DtgAgentSdk.BadRequestError);
     });
 
-    test("updateAgent (3)", async () => {
+    test("updateCamera (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -437,7 +453,7 @@ describe("AgentsClient", () => {
 
         server
             .mockEndpoint()
-            .patch("/api/v1/agents/id")
+            .patch("/api/v1/cameras/id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(401)
@@ -445,13 +461,13 @@ describe("AgentsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.agents.updateAgent({
+            return await client.cameras.updateCamera({
                 id: "id",
             });
         }).rejects.toThrow(DtgAgentSdk.UnauthorizedError);
     });
 
-    test("updateAgent (4)", async () => {
+    test("updateCamera (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -459,7 +475,7 @@ describe("AgentsClient", () => {
 
         server
             .mockEndpoint()
-            .patch("/api/v1/agents/id")
+            .patch("/api/v1/cameras/id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(403)
@@ -467,13 +483,13 @@ describe("AgentsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.agents.updateAgent({
+            return await client.cameras.updateCamera({
                 id: "id",
             });
         }).rejects.toThrow(DtgAgentSdk.ForbiddenError);
     });
 
-    test("updateAgent (5)", async () => {
+    test("updateCamera (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -481,7 +497,7 @@ describe("AgentsClient", () => {
 
         server
             .mockEndpoint()
-            .patch("/api/v1/agents/id")
+            .patch("/api/v1/cameras/id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(404)
@@ -489,13 +505,13 @@ describe("AgentsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.agents.updateAgent({
+            return await client.cameras.updateCamera({
                 id: "id",
             });
         }).rejects.toThrow(DtgAgentSdk.NotFoundError);
     });
 
-    test("updateAgent (6)", async () => {
+    test("updateCamera (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -503,7 +519,7 @@ describe("AgentsClient", () => {
 
         server
             .mockEndpoint()
-            .patch("/api/v1/agents/id")
+            .patch("/api/v1/cameras/id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(429)
@@ -511,130 +527,9 @@ describe("AgentsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.agents.updateAgent({
+            return await client.cameras.updateCamera({
                 id: "id",
             });
         }).rejects.toThrow(DtgAgentSdk.TooManyRequestsError);
-    });
-
-    test("startAgent", async () => {
-        const server = mockServerPool.createServer();
-        const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = {
-            status: "ok",
-            code: "code",
-            message: "message",
-            data: { revoked: true, deleted: true, started: true, stopped: true },
-            trace_id: "trace_id",
-            timestamp: "2024-01-15T09:30:00Z",
-        };
-
-        server
-            .mockEndpoint()
-            .post("/api/v1/agents/id/start")
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.agents.startAgent({
-            id: "id",
-        });
-        expect(response).toEqual(rawResponseBody);
-    });
-
-    test("stopAgent", async () => {
-        const server = mockServerPool.createServer();
-        const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = {
-            status: "ok",
-            code: "code",
-            message: "message",
-            data: { revoked: true, deleted: true, started: true, stopped: true },
-            trace_id: "trace_id",
-            timestamp: "2024-01-15T09:30:00Z",
-        };
-
-        server
-            .mockEndpoint()
-            .post("/api/v1/agents/id/stop")
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.agents.stopAgent({
-            id: "id",
-        });
-        expect(response).toEqual(rawResponseBody);
-    });
-
-    test("getAgentChannels", async () => {
-        const server = mockServerPool.createServer();
-        const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = {
-            status: "ok",
-            code: "code",
-            message: "message",
-            data: [{ type: "telegram", env: { key: "value" } }],
-            trace_id: "trace_id",
-            timestamp: "2024-01-15T09:30:00Z",
-        };
-
-        server
-            .mockEndpoint()
-            .get("/api/v1/agents/id/channels")
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.agents.getAgentChannels({
-            id: "id",
-        });
-        expect(response).toEqual(rawResponseBody);
-    });
-
-    test("updateAgentChannels", async () => {
-        const server = mockServerPool.createServer();
-        const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = {
-            status: "ok",
-            code: "code",
-            message: "message",
-            data: [{ type: "telegram", env: { key: "value" } }],
-            trace_id: "trace_id",
-            timestamp: "2024-01-15T09:30:00Z",
-        };
-
-        server
-            .mockEndpoint()
-            .put("/api/v1/agents/id/channels")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.agents.updateAgentChannels({
-            id: "id",
-        });
-        expect(response).toEqual(rawResponseBody);
-    });
-
-    test("listAgentModels", async () => {
-        const server = mockServerPool.createServer();
-        const client = new DtgAgentSdkClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { object: "object", data: [{ id: "id", object: "object", owned_by: "owned_by" }] };
-
-        server.mockEndpoint().get("/api/v1/models").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
-
-        const response = await client.agents.listAgentModels();
-        expect(response).toEqual(rawResponseBody);
     });
 });
