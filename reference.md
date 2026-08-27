@@ -1085,6 +1085,254 @@ await client.knowledge.deleteKnowledge({
 </dl>
 </details>
 
+## cameras
+<details><summary><code>client.cameras.<a href="/src/api/resources/cameras/client/Client.ts">listCameras</a>() -> DtgAgentSdk.ListCamerasResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.cameras.listCameras();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `CamerasClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.cameras.<a href="/src/api/resources/cameras/client/Client.ts">createCamera</a>({ ...params }) -> DtgAgentSdk.CreateCameraResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.cameras.createCamera({
+    display_name: "display_name",
+    vendor: "generic_rtsp",
+    rtsp_url: "rtsp_url"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `DtgAgentSdk.CameraCreateRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CamerasClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.cameras.<a href="/src/api/resources/cameras/client/Client.ts">getCamera</a>({ ...params }) -> DtgAgentSdk.GetCameraResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.cameras.getCamera({
+    id: "id"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `DtgAgentSdk.GetCameraRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CamerasClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.cameras.<a href="/src/api/resources/cameras/client/Client.ts">deleteCamera</a>({ ...params }) -> DtgAgentSdk.DeleteCameraResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.cameras.deleteCamera({
+    id: "id"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `DtgAgentSdk.DeleteCameraRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CamerasClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.cameras.<a href="/src/api/resources/cameras/client/Client.ts">updateCamera</a>({ ...params }) -> DtgAgentSdk.UpdateCameraResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.cameras.updateCamera({
+    id: "id"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `DtgAgentSdk.CameraUpdateRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CamerasClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## mcp-servers
 <details><summary><code>client.mcpServers.<a href="/src/api/resources/mcpServers/client/Client.ts">listMcpServers</a>() -> DtgAgentSdk.ListMcpServersResponse</code></summary>
 <dl>

@@ -5,9 +5,9 @@
     "generatorConfig": {
         "namespaceExport": "DtgAgentSdk"
     },
-    "originGitCommit": "4de4278eb8d8062d99d164f41db7caaeb77654d1",
-    "originGitCommitIsDirty": false,
+    "originGitCommit": "45e3f4bd3723752f9260555e1ca95753c2de7296",
+    "originGitCommitIsDirty": true,
     "invokedBy": "manual",
-    "requestedVersion": "0.1.2",
-    "sdkVersion": "0.1.2"
+    "requestedVersion": "0.1.3",
+    "sdkVersion": "0.1.3"
 }

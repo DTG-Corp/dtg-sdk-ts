@@ -19,6 +19,8 @@ export interface AgentUpdateRequest {
     knowledge_ids?: string[];
     /** Omit/null = giữ nguyên; [] = xoá. */
     enabled_tools?: string[];
+    /** Omit/null = giữ nguyên; [] = xoá. Chỉ hiệu lực khi tool org_cameras được bật. */
+    camera_tool_ids?: string[];
     /** Omit/null = giữ nguyên; [] = xoá. */
     mcp_dynamic_server_ids?: string[];
     /** Omit/null = giữ nguyên; {} = xoá. */
